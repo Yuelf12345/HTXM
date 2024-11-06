@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@types/koa": "^2.15.0",
+    "htmx.org": "^1.9.12",
+    "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "koa": "^2.15.3",
+    "koa-body": "^6.0.1",
+    "koa-router": "^13.0.1",
+    "koa2-cors": "^2.0.6",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2"
+  },
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon --watch src/ -e ts --exec ts-node ./src/index.ts"
+  }
+}

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>HTMX Demo</title>
+    <script src="https://unpkg.com/htmx.org"></script>
+    <style>
+        .loading {
+            width: 80px;
+            height: 30px;
+            margin: 0 auto;
+        }
+
+        .loading span {
+            display: inline-block;
+            width: 8px;
+            height: 100%;
+            border-radius: 4px;
+            background: lightgreen;
+            -webkit-animation: load 1s ease infinite;
+        }
+
+        @-webkit-keyframes load {
+
+            0%,
+            100% {
+                height: 20px;
+                background: lightgreen;
+            }
+
+            50% {
+                height: 40px;
+                margin: -15px 0;
+                background: lightblue;
+            }
+        }
+
+        .loading span:nth-child(2) {
+            -webkit-animation-delay: 0.2s;
+        }
+
+        .loading span:nth-child(3) {
+            -webkit-animation-delay: 0.4s;
+        }
+
+        .loading span:nth-child(4) {
+            -webkit-animation-delay: 0.6s;
+        }
+
+        .loading span:nth-child(5) {
+            -webkit-animation-delay: 0.8s;
+        }
+
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            background-color: #f9f9f9;
+        }
+
+        .task-item.completed {
+            text-decoration: line-through;
+            color: #888;
+        }
+
+        .task-item button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #ff4d4d;
+        }
+
+        .task-item button:hover {
+            color: #ff1a1a;
+        }
+
+        .add-task input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .add-task button {
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .add-task button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<body>
+
+    <label>关键词：
+        <!-- 
+            trigger属性 once changed delay:<时间间隔> throttle:<时间间隔> from:<CSS选择器>
+         -->
+        <input type="text" placeholder="输入关键词" hx-get="http://localhost:3000/getJoke" hx-target="#joke-container"
+            hx-trigger="keyup delay:500ms" name="contains" />
+    </label>
+
+    <div id="joke-container">笑话内容</div>
+
+    <hr>
+
+    <button hx-get="http://localhost:3000/delayedData">
+        加载数据动画
+        <div class="htmx-indicator loading">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </button>
+
+    <hr>
+
+    <form hx-post="http://localhost:3000/postName" hx-target="#name-container">
+        <label>输入名字：
+            <input type="text" name="name" placeholder="输入你的名字" required />
+        </label>
+        <button type="submit">提交</button>
+    </form>
+
+    <div id="name-container">名字内容</div>
+
+    <hr>
+    
+    <h1>任务列表</h1>
+
+    <div class="add-task">
+        <form hx-post="http://localhost:3000/addTask" hx-target="#task-list">
+            <input type="text" name="newTask" placeholder="添加新任务"
+                hx-swap="afterbegin" required />
+            <button type="submit">添加</button>
+        </form>
+    </div>
+
+    <ul id="task-list" class="task-list">
+        <!-- 任务项将在这里动态添加 -->
+    </ul>
+
+    <script>
+        document.querySelector('.add-task').addEventListener('submit', function(event) {
+            event.preventDefault();
+            this.querySelector('input').value = '';
+        });
+    </script>
+</body>
+
+</html>
